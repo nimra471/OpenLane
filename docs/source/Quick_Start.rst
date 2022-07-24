@@ -47,11 +47,7 @@ After running the above command the output is:
     [INFO]: Creating design src directory /openlane/designs/design_name/src
     [INFO]: Populating /openlane/designs/design_name/config.tcl..
     [INFO]: Finished populating:
-<<<<<<< HEAD
     /openlane/designs/design_name/config.tcl 
-=======
-    /openlane/designs/caravel_upwl/config.tcl 
->>>>>>> aab2017d76150a6b67b4ef4e54355edb80cb0c88
     Please modify CLOCK_PORT, CLOCK_PERIOD and add your advanced settings to /openlane/designs/design_name/config.tcl
     [SUCCESS]: Done...
 

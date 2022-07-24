@@ -10,6 +10,7 @@
    designs/README.md
    docker/README.md
    docs/source/advanced_power_grid_control.md
+   docs/source/eco_flow.md
    docs/source/advanced_readme.md
    docs/source/chip_integration.md
    docs/source/hardening_macros.md
@@ -22,4 +23,4 @@
    tests/Readme.md
    regression_results/datapoint_definitions.md
    .github/workflow-documentation.md
-   docs/source/reference
+

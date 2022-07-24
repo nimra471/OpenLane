@@ -21,8 +21,6 @@
 # -- Path setup --------------------------------------------------------------
 import os
 import sys
-from recommonmark.parser import CommonMarkParser
-
 sys.path.insert(0, os.path.abspath("docs/_ext"))
 
 # -- Project information -----------------------------------------------------
@@ -41,17 +39,12 @@ extensions = [
     "markdown_code_links",  # CUSTOM
     "markdown_cross_doc_section_links",  # CUSTOM
     "sphinx.ext.autosectionlabel",
-    "sphinx_markdown_tables",
     "image_links",  # CUSTOM
-    "toc_from_markdown",  # CUSTOM
-    "recommonmark",
+    "myst_parser",
 ]
 
 # Expand source suffixes
 
-source_parsers = {
-    ".md": CommonMarkParser,
-}
 
 source_suffix = {
     ".rst": "restructuredtext",
@@ -69,6 +62,10 @@ exclude_patterns = [
     "_build",
     "Thumbs.db",
     "scripts/tcl_commands/README.md",
+    ".github/ISSUE_TEMPLATE/*",
+    "scripts/*",
+    "venv/*",
+    "pdks/*"
     # Files included in other rst files.
 ]
 
@@ -113,6 +110,4 @@ autosectionlabel_prefix_document = True
 suppress_warnings = ["misc.highlighting_failure"]  # supress json highlight warnings
 
 
-def setup(app):
-    app.emit("create_index_softlink", "README.md", True)
-    app.emit("toc_from_markdown", "README.md", ".autotoc.rst", True)
+root_doc = 'index'

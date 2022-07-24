@@ -76,7 +76,7 @@ RUN cd build && cmake -DCMAKE_INSTALL_PREFIX=$(pwd)/install ..
 RUN cd build && make -j$(nproc)
 RUN cd build && make install
 RUN cp -r build/install/bin /build/
-
+RUN yum install -y xorg-x11-server-Xorg xorg-x11-xauth mesa-dri-drivers
 RUN date +"Build Timestamp: %Y-%m-%d_%H-%M-%S" > /build/version/openroad.version
 RUN echo ${OPENROAD_APP_COMMIT} >> /build/version/openroad.version
 RUN tar -czf /build.tar.gz /build

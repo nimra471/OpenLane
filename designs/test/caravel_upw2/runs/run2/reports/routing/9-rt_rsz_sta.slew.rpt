@@ -1,0 +1,41 @@
+
+===========================================================================
+ report_check_types -max_slew -max_cap -max_fanout -violators
+============================================================================
+max slew
+
+Pin                                    Limit    Slew   Slack
+------------------------------------------------------------
+io_in[23]                               1.50    1.74   -0.25 (VIOLATED)
+io_in[24]                               1.50    1.68   -0.18 (VIOLATED)
+io_in[25]                               1.50    1.62   -0.12 (VIOLATED)
+io_in[14]                               1.50    1.58   -0.09 (VIOLATED)
+io_in[22]                               1.50    1.56   -0.07 (VIOLATED)
+io_in[15]                               1.50    1.56   -0.06 (VIOLATED)
+io_in[31]                               1.50    1.54   -0.04 (VIOLATED)
+io_in[26]                               1.50    1.53   -0.04 (VIOLATED)
+io_in[37]                               1.50    1.53   -0.04 (VIOLATED)
+
+max capacitance
+
+Pin                                    Limit     Cap   Slack
+------------------------------------------------------------
+io_in[23]                               0.33    0.39   -0.06 (VIOLATED)
+io_in[24]                               0.33    0.39   -0.06 (VIOLATED)
+io_in[25]                               0.33    0.37   -0.04 (VIOLATED)
+io_in[14]                               0.33    0.37   -0.03 (VIOLATED)
+io_in[22]                               0.33    0.36   -0.03 (VIOLATED)
+io_in[26]                               0.33    0.36   -0.02 (VIOLATED)
+io_in[15]                               0.33    0.36   -0.02 (VIOLATED)
+io_in[21]                               0.33    0.34   -0.01 (VIOLATED)
+io_in[37]                               0.33    0.34   -0.01 (VIOLATED)
+io_in[31]                               0.33    0.34   -0.01 (VIOLATED)
+io_in[13]                               0.33    0.34   -0.00 (VIOLATED)
+io_in[36]                               0.33    0.33   -0.00 (VIOLATED)
+
+
+===========================================================================
+max slew violation count 9
+max fanout violation count 0
+max cap violation count 12
+============================================================================

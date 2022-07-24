@@ -99,8 +99,16 @@ get-openlane:
 .PHONY: mount
 mount:
 	cd $(OPENLANE_DIR) && \
-		$(ENV_START) -ti $(OPENLANE_IMAGE_NAME)-$(DOCKER_ARCH)
-
+	        docker run -it --rm \
+			-e PDK_ROOT=$(PDK_ROOT) \
+			-u root \
+			-v $(OPENLANE_DIR):/openlane \
+			-v $(PDK_ROOT):$(PDK_ROOT) \
+                        --volume /tmp/.X11-unix:/tmp/.X11-unix \
+                        --volume ${HOME}/.Xauthority:/.Xauthority \
+                        --security-opt seccomp=unconfined \
+                        --privileged \
+			$(DOCKER_OPTIONS) $(OPENLANE_IMAGE_NAME)
 .PHONY: pdk
 pdk: venv/created
 	./venv/bin/$(PYTHON_BIN) -m pip install --upgrade --no-cache-dir volare

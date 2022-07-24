@@ -22,3 +22,4 @@
    tests/Readme.md
    regression_results/datapoint_definitions.md
    .github/workflow-documentation.md
+   docs/source/reference

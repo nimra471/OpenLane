@@ -31,7 +31,7 @@ View the design configuration file of mem_1r1w:
 
   ./designs/mem_1r1w/config.tcl
 
-View the design `configuration file <https://github.com/nimra471/OpenLane/tree/master/designs/mem_1r1w/config.tcl>`_.
+View the design `configuration file <https://github.com/nimra471/OpenLane/blob/merged-window/designs/mem_1r1w/config.tcl>`_.
 
 .. important::
 

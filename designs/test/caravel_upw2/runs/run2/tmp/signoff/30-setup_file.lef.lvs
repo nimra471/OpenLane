@@ -1,1 +1,0 @@
-lvs {/openlane/designs/caravel_upw/runs/run2/results/signoff/user_project_wrapper.spice user_project_wrapper} {/openlane/designs/caravel_upw/runs/run2/tmp/signoff/27-powered_netlist.v user_project_wrapper} /home/nimra/Documents/pdk/sky130A/libs.tech/netgen/sky130A_setup.tcl /openlane/designs/caravel_upw/runs/run2/logs/signoff/30-user_project_wrapper.lef.log -json

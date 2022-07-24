@@ -110,4 +110,12 @@ autosectionlabel_prefix_document = True
 suppress_warnings = ["misc.highlighting_failure"]  # supress json highlight warnings
 
 
+<<<<<<< HEAD
 root_doc = 'index'
+=======
+def setup(app):
+    app.emit("create_index_softlink", "README.md", True)
+    app.emit("toc_from_markdown", "README.md", ".autotoc.rst", True)
+
+numpydoc_show_class_members = False
+>>>>>>> aab2017d76150a6b67b4ef4e54355edb80cb0c88

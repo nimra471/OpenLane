@@ -6,19 +6,18 @@ Introduction
 ============
 
 This document includes tutorials for running an entire OpenROAD-based
-flow from RTL to GDSII.This tutorials includes GUI visualization, EDA
+flow from RTL to GDSII.This tutorials includes GUI visualization, klayout visualization, EDA
 tools, Design Explorations, and Different Design Experiments.
 Additionally, a brief description of each step in the flow is provided,
 facilitating the user’s comprehension and ease of usage.
 
-Platform Configuration
-----------------------
-
-View the platform configuration file setup for default variable for sky130hd.
+Platform 
+----------
 
 .. code-block:: shell
 
-   ./designs/picorv32a/sky130A_sky130_fd_sc_hd_config.tcl 
+   set ::env(PDK) "sky130A"
+   set ::env(STD_CELL_LIBRARY) "sky130_fd_sc_hd"
 
 
 The libraries cell information can found `here <https://antmicro-skywater-pdk-docs.readthedocs.io/en/test-submodules-in-rtd/contents/libraries.html>`_.
@@ -26,14 +25,13 @@ The libraries cell information can found `here <https://antmicro-skywater-pdk-do
 Design Configuration
 --------------------
 
-
-View the design configuration file of picorv32a:
+View the design configuration file of mem_1r1w:
 
 .. code-block:: shell
 
-  ./designs/picorv32a/config.tcl
+  ./designs/mem_1r1w/config.tcl
 
-View the design `configuration file <https://github.com/nimra471/OpenLane/tree/master/designs/picorv32a/config.tcl>`_.
+View the design `configuration file <https://github.com/nimra471/OpenLane/tree/master/designs/mem_1r1w/config.tcl>`_.
 
 .. important::
 
@@ -49,94 +47,165 @@ The input Verilog files are located at this path:
 
 .. code-block:: shell
 
-   ./designs/picorv32a/src/picorv32a.
+   ./designs/mem_1r1w/src/mem_1r1w.v
 
 
 Running The Automatic RTL-to-GDS Flow
 =======================================
 
-This section describe the complete RTL-to-GDS flow of the design. In this tutorial, user will learn both automated and interactive way to run the flow.
+This section describe the complete RTL-to-GDS flow of the design. In this tutorial, user will learn both automated and interactive way to run the flow way.
 
 Design Goals
------------------
-**Area**
+------------
+
+- Area
 
 .. code-block:: shell
 
-   core utilization=35
+   DIE_AREA { 0 0 300 300} in microns
 
-**Timing**
+- Timing
+
+The clock period time to meet the timing of the design.
+
+.. code-block:: shell
+   
+   CLOCK_PERIOD "10.0" in ns
+
+
+Running the Design
+------------------
+
+.. code-block:: shell
+   
+   ./flow.tcl -design mem_1w1r -tag run_final
+
+   
+View Result of the flow
+-----------------------
 
 .. code-block:: shell
 
-   CLOCK_PERIOD= "10" (in ns)
+   ./design/mem_1r1w/runs/run_final/result/
 
 
-Synthesis
---------------
+The area, power and timing report is found in the report directory ``./design/mem_1r1w/runs/run_final/report/synthesis/``.
 
-After running the design, the generated synthesis netlist located at the path:
+Area
+-----
+
+.. code-block:: shell
+   
+   ===========================================================================
+   report_design_area
+   ============================================================================
+   Design area 25379 u^2 100% utilization.
+   
+
+Power                                              
+--------
+
+.. code-block:: shell
+   
+   ===========================================================================
+   report_power
+   ============================================================================
+   Group                  Internal  Switching    Leakage      Total
+                          Power      Power      Power      Power (Watts)
+   ----------------------------------------------------------------
+   Sequential             2.35e-03   8.74e-05   4.59e-09   2.44e-03  83.3%
+   Combinational          3.38e-04   1.52e-04   4.51e-09   4.90e-04  16.7%
+   Macro                  0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+   Pad                    0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+   ----------------------------------------------------------------
+   Total                  2.69e-03   2.40e-04   9.10e-09   2.93e-03 100.0%
+                          91.8%       8.2%       0.0%
+
+Timing
+-------
+
+.. code-block:: shell
+    
+     5.79   slack (MET)
+     tns 0.00
+     wns 0.00
+
+Viewing Layout Result 
+----------------------
+
+Load the GDS file on klayout from the result diractory ``./design/mem_1r1w/runs/run_final/result/final/gds`` using the command:
 
 .. code-block:: shell
 
-   ./designs/picorv32a/runs/result/synthesis/picorv32a.v
+   klayout mem_1w1r.gds
+
+.. image:: ../_static/gds.png
 
 
-All the timing, power and area report are located at the path:
+GUI
+=======
+The OpenROAD GUI is a powerful visualization, analysis and debugging errors using TCL command interface.
+
+Running GUI
+------------
+
+Launch OpenROAD GUI by running the command inside the OpenLane docker image:
 
 .. code-block:: shell
-
-   ./designs/picorv32a/runs/report/synthesis/picorv32a.v
-
-.. code-block:: shell
-
-   === picorv32a ===
-
-   Number of wires:              14770
-   Number of wire bits:          17781
-   Number of public wires:         162
-   Number of public wire bits:    1972
-   Number of memories:               0
-   Number of memory bits:            0
-   Number of processes:              0
-   Number of cells:              16785
-     $_ANDNOT_                    4044
-     $_AND_                       1384
-     $_DFFE_PP_                    957
-     $_DFF_P_                      227
-     $_MUX_                       1883
-     $_NAND_                       761
-     $_NOR_                        588
-     $_NOT_                        917
-     $_ORNOT_                      209
-     $_OR_                        2312
-     $_SDFFCE_PN0P_                 36
-     $_SDFFCE_PP0P_                  9
-     $_SDFFCE_PP1P_                  1
-     $_SDFFE_PN0P_                 192
-     $_SDFFE_PN1N_                   4
-     $_SDFFE_PN1P_                  32
-     $_SDFFE_PP0P_                   1
-     $_SDFFE_PP1P_                   3
-     $_SDFF_PN0_                   133
+   
+   make mount
+   openroad -gui
 
 
-
-
-Explore different Synthesis Strategies for timing and area optimization using variable ``set ::env(SYNTH_STRATEGY) DELAY 0``.
+Synthesis Exploration
+----------------------
 
 Floor planning
-------------------------
+----------------
 
-.. image:: ../_static/floorplan.png
+Macro Placement
+----------------
 
-The placement of io pins io_placer:
+Placement
+----------
 
-.. image:: ../_static/pdn.png
+Clock Tree Synthesis
+---------------------
 
-The generation of power grid:
+Routing
+--------
 
-.. image:: ../_static/pdn2.png
+DRC Check
+----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

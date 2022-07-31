@@ -260,7 +260,7 @@ load the final GDSII using klayout:
 
    klayout mem_1r1r.gds
 
-.. image:: ../_static/gds.png
+.. image:: ../_static/final.png
 
 
 

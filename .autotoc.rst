@@ -23,4 +23,10 @@
    tests/Readme.md
    regression_results/datapoint_definitions.md
    .github/workflow-documentation.md
-
+   docker/tar/openlane/AUTHORS.md
+   docker/tar/openlane/configuration/README.md
+   docker/tar/openlane/designs/README.md
+   docker/tar/openlane/regression_results/README.md
+   docker/tar/openlane/regression_results/datapoint_definitions.md
+   docker/tar/openlane/scripts/tcl_commands/README.md
+   docker/tar/openlane/scripts/topModuleGen/README.md

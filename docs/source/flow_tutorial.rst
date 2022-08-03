@@ -46,7 +46,7 @@ Set the basic configuration config.tcl file for a design using the `OpenLane Var
 
    set ::env(DESIGN_NAME) mem_1r1w
    set ::env(VERILOG_FILES) [glob $::env(DESIGN_DIR)/src/*.v]
-   set ::env(SDC_FILE) "./designs/mem_1r1w/constraint.sdc"
+   set ::env(BASE_SDC_FILE) "./designs/mem_1r1w/constraint.sdc"
    set ::env(CLOCK_PORT) "clk"
    set ::env(CLOCK_NET) $::env(CLOCK_PORT)
    

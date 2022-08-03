@@ -2,19 +2,21 @@
 Interactive Mode 
 ================
 
-OpenLane run in a interactive mode by using ``-interactive`` where every steps of a design run by the user.
+You can run OpenLane in an interactive mode for greater control for each step of the design flow as follows:
+
 
 .. code-block:: shell
 
     ./flow.tcl -interactive
 
-A tcl shell will be opened where the OpenLane package is automatically sourced:
+
+This opens an interactive TCl interpreter window.
 
 .. code-block:: shell 
 
     % package required openlane
 
-Then, able to run the following main commands:
+You will be able to run the following commands:
 
 .. code-block:: shell
 
@@ -45,8 +47,8 @@ The above commands can also be written in a file and passed to ``flow.tcl``:
 
 
 .. Note::
-    
-    1. You can directly run the above command without prep using ``./flow.tcl -interactive -design <design_name> -tag <tag_name>``.
+      
+    1. You can directly pass the command line argument to  ``./flow.tcl -interactive`` to run the above commands without using prep.
     2. Run the above commands in the same flow sequence and no step should be skipped.
 
 

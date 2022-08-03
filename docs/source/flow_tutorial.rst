@@ -4,53 +4,75 @@ Flow Tutorial
 
 Introduction
 ============
-This document includes tutorials for running an complete OpenROAD-based flow from RTL to GDSII. This tutorials include GUI visualization, Klayout visualization, EDA tools, design explorations, and different design experiments. Additionally, a brief description of each step in the flow is provided, facilitating the user’s comprehension and ease of use of the OpenLane tool.
+OpenLane is an automated RTL-GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, CVC, Klayout and a number of custom scripts for design exploration and optimization. The flow performs full ASIC implementation steps from RTL all the way down to GDSII.
 
-.. image:: ../_static/OpenLane_flow.png
+You will learn how to set up and run the OpenLane flow from RTL to GDSII and generate a DRC, LVS clean layout.
 
 Getting Started
 ----------------
-This section describes the environment setup for OpenLane and how to get ready to execute the  RTL to GDSII flow.
+
+This section describes the environment setup to run a design in both automatic and interactive mode.
 
 ``mem_1r1w`` is a memory design used in the tutorial.
 
-
 Setting Up Environment
 -----------------------
-Install the OpenROADOpenLane. Refer to the OpenLane Installation.
+
+Install the OpenLane. Refer to the OpenLane Installation.
+
+Configuring The Design
+-----------------------
+This section describes how to set up the necessary platform and design configuration files to run the complete RTL-GDSII flow.
+
+Refer to `Openlane Variables <https://github.com/The-OpenROAD-Project/OpenLane/blob/master/configuration/README.md>`_ for platform and design configuration variables.
 
 Platform Configuration
 -----------------------
+The default variable for platform configuration of the design:
 
 .. code-block:: shell
 
-
+   set ::env(PDK) "sky130"
+   set ::env(STD_CELL_LIBRARY) <path for sky130_fd_sc_hd> # set by default
 
 
 Refer to the library information `here <https://antmicro-skywater-pdk-docs.readthedocs.io/en/test-submodules-in-rtd/contents/libraries.html>`_.
 
 Design Configuration
 ---------------------
-Set the basic configuration config.tcl file for a design using the `OpenLane Variables <https://openlane-docs.readthedocs.io/en/rtd-develop/configuration/README.html>`_:
+Set the basic configuration config.tcl file for a design using the `OpenLane Variables <https://github.com/The-OpenROAD-Project/OpenLane/blob/master/configuration/README.md>`_:
 
 .. code-block:: shell
-   
 
-View the design configuration file of ``mem_1r1w``:
+   set ::env(DESIGN_NAME) mem_1r1w
+   set ::env(VERILOG_FILES) [glob $::env(DESIGN_DIR)/src/*.v]
+   set ::env(SDC_FILE) "./designs/mem_1r1w/constraint.sdc"
+   set ::env(CLOCK_PORT) "clk"
+   set ::env(CLOCK_NET) $::env(CLOCK_PORT)
+   
+- View the design configuration file of ``mem_1r1w``:
 
 .. code-block:: shell
    
    ./designs/mem_1r1w/config.tcl
 
+Timing constraint
+-------------------
 
-.. important::
+- View the timing constraints specified in the ``.sdc`` file:
+
+.. code-block:: shell
+
+   ./designs/mem_1r1w/constraint.sdc
    
-   It is mandatory to add a correct top-level design in the DESIGN_NAME and the correct path of verilog source file in VERILOG_FILES and platform in order to start the flow.
+.. note::
+
+   The timing constraints can be specified according to the design requirement. 
 
 Design Source File
 -------------------
 
-The input verilog source file of ``mem_1r1w`` is:
+- View the input verilog source file of ``mem_1r1w`` is:
 
 .. code-block:: shell
    
@@ -59,89 +81,129 @@ The input verilog source file of ``mem_1r1w`` is:
 
 Running The Automatic  RTL-GDSII Flow
 =======================================
-This section describes the execution of automatic RTL to GDS flow from synthesis to final GDSII using the Tcl script without human interaction. This section also includes an interactive mode where users can run the individual stage flow using tool commands and understand each flow stage at their own pace and preference.
 
-Learn the `interactive mode  <Interactive_Mode.html>`_ and run the design.
+In this section you will learn how to run the complete design flow from RTL-GDSII both in the interactive and automatic flow.
+
+Refer to `README.md <https://github.com/The-OpenROAD-Project/OpenLane#command-line-arguments>`_ for command line argument usage of ``./flow.tcl``
+
+Refer to `interactive mode <Interactive_Mode.html>`_ to learn how to run a complete design flow in interactive mode.
 
 Design Goal
 ------------
 Run the ``mem_1r1w`` design in an automatic flow using the above design configuration file for the given design goals to meet the timing and ensure it is clean from all DRC, LVS, and antenna violations.
 
+- Timing
 
-
-The clock period time to meet the timing of the design:
+Use the clock period to meet the timing of the ``mem_1r1w``:
 
 .. code-block:: shell
 
-   CLOCK_PERIOD “10.0” in ns
+   CLOCK_PERIOD “10.0” #in ns
+   
+Make sure you are in the openlane directory:
 
+.. code-block:: shell
 
+   cd Openlane
 
-Running the automatic flow inside the docker with:
+Run the complete flow with:
 
 .. code-block:: shell
    
    ./flow.tcl -design mem_1r1w -tag run1
 
 
+
 Run Directory Structure
 -----------------------
-As the flow is completed, it is important to check the results, reports, and logs file of each flow inside the run directory to understand and debug in case of flow failure:
+
+The flow is completed, check the results, reports, and logs files of each stage flow within the run directory:
 
 .. code-block:: shell
    
    ./design/mem_1r1w/runs/run1
 
-.. image:: ../_static/tree4.png
+View logs OF The Flow
+----------------------
 
-- View the reports directory of ``mem_1r1w`` which contains area, timing, DRC, and antenna reports:
+The example log tree structure below shows the step number for each flow stage, indicating its position in the RTL-GDSII flow. In case of flow failure, you can use these logs to understand each stage and debug.
+
+
+.. image:: ../_static/finaltree2.png
+
+- View the logs files:
+
+.. code-block:: shell
+
+   ./designs/mem_1r1r/runs/run1/logs/
+
+
+View Reports OF The Flow:
+-------------------------
+
+- View the reports of the flow which contains area, timing, DRC, and antenna reports:
 
 .. code-block:: shell
 
    ./designs/mem_1r1w/runs/run1/reports/
 
-- View the logs of ``mem_1r1w`` for every step in the each stage of flow:
 
-.. code-block:: shell
+- The table below shows the generated example reports:
 
-   ./designs/mem_1r1w/runs/run1/logs/
++--------------------------------+-----------------------------+-----------------------+
+|``1-synthesis.AREA_0.chk.rpt``  | ``1-synthesis_dff.stat``    |    ``2-syn_sta.rpt``  |
+|                                |                             |                       |
++--------------------------------+-----------------------------+-----------------------+
+| ``3-initial_fp_core_area.rpt`` |``3-initial_fp_die_area.rpt``|    11-cts_sta.rpt     |
+|                                |                             |                       |
++--------------------------------+-----------------------------+-----------------------+
+| ``11-cts_sta.clock_skew.rpt``  |     ``18-grt_sta.rpt``      |   ``32-xor.rpt``      |
+|                                |                             |                       |
++--------------------------------+-----------------------------+-----------------------+
+| ``38-antenna_violators.rpt``   |         ``drc.rpt``         |                       |
+|                                |                             |                       |
++--------------------------------+-----------------------------+-----------------------+
 
-View Results Of The Flow
--------------------------
+View Result Of The Flow:
+------------------------
 
-- View the results directory of ``mem_1r1w`` flow of each stage which contains ``.v``, ``.def``, ``.sdc``, ``sdf``, ``spef``, ``.lef``, ``.gds`` file:
+- View the results of the flow which contains ``.def``, ``.v``, ``lef``, ``.sdf``, ``.spef``,  ``.spi``, ``.sdc`` and ``.gds`` files:
 
 .. code-block:: shell
 
    ./designs/mem_1r1w/runs/run1/results/
 
-
+   
 Flow stages
 ===========
-Users can view flow results using the command interface from the shell or OpenROAD GUI to visualize the layout or results and debug it.
 
-Refer to the `OpenROAD GUI <https://openroad.readthedocs.io/en/latest/main/src/gui/README.html>`_ to learn how to open GUI, visualizes and debug.
+You can view flow results using the command interface from the shell or OpenROAD GUI to visualize the layout and debug it.
+
+Refer to the `OpenROAD GUI <https://openroad.readthedocs.io/en/latest/main/src/gui/README.html>`_ to learn how to open GUI and visualize the design objects.
 
 Synthesis
 ----------
+
 - View the results of the synthesis, a generated netlist ``.v`` file of ``mem_1r1w``:
 
 .. code-block:: shell
    
    ./designs/mem_1r1w/runs/run1/results/synthesis/mem_1r1w.v
 
+Synthesis Exploration
+-----------------------
 
 - Explore different synthesis strategies for timing and area optimization:
 
 .. code-block:: shell
 
-   set ::env(SYNTH_STRATEGY) "DELAY 0", 1, 2 # for timing optimization
-   set ::env(SYNTH_STRATEGY) "AREA 1", 1, 2 # for area optimization
+  set ::env(SYNTH_STRATEGY) "DELAY 0", 1, 2 # for timing optimization
+  set ::env(SYNTH_STRATEGY) "AREA 1", 1, 2 # for area optimization
 
 
 set the above variable in the ``config.tcl`` file and re-run the design to see the impact.
 
-Floor Planning
+FloorPlanning
 --------------
 
 - View the results of the floorplan ``.def`` file of ``mem_1r1w``:
@@ -164,26 +226,26 @@ Floor Planning
 
 .. image:: ../_static/pdn(2).png
 
-- View the reports directory to 
-
 
 Placement
 ----------
-- View the results of placement ``.def`` file on gui:
+
+- View the results of the placement ``.def`` file:
 
 .. code-block:: shell
 
    ./designs/mem_1r1w/runs/run1/results/placement/mem_1r1w.def
 
-.. image:: ../_static/placement1.png
+- View the placement density heatmap of ``mem_1r1w`` design on gui:
 
+.. image:: ../_static/placement_density.png
 
-Change the ``DIE_AREA`` or ``FP_CORE_UTIL`` and ``PL_TARGET_DENSITY`` in the ``config.tcl`` and re-run the design to see the impact on the placement of standard cells.
+Change the ``DIE_AREA`` or ``FP_CORE_UTIL`` and ``PL_TARGET_DENSITY`` in the ``config.tcl`` and re-run the design to see the impact on the placement density of standard cells.
 
 Clock Tree Synthesis
 --------------------
 
-- View the results directory of cts of ``mem_1r1w``:
+- View the results of the cts of ``mem_1r1w``:
 
 .. code-block:: shell
 
@@ -196,7 +258,7 @@ Clock Tree Synthesis
 
 Routing
 --------
-- View the results directory of routing of ``mem_1r1r``:
+- View the results of the routing of ``mem_1r1r``:
 
 .. code-block:: shell
 
@@ -214,36 +276,30 @@ Routing
 
 - **Timing**
 
-View the worst slack, worst negative slack and total negative slack of ``mem_1r1w`` from the reports:
+View the worst slack, worst negative slack and total negative slack of ``mem_1r1w``:
 
 
 .. code-block:: shell
    
    report_worst_slack -max (Setup)
-   worst slack 6.32
+   worst slack 6.48
    report_worst_slack -min (Hold)
-   worst slack 0.22
+   worst slack 0.50
    wns 0.00
    tns 0.00
 
-- **Area**
-
-View the resulting area and its core utilization:
-
-.. code-block:: shell
-
-   Design area 29099 u^2 54% utilization.
 
 
 SignOff
 --------
-- View the final layout GDSII and check it is DRC, LVS and antenna check passed.
+- View the final layout GDSII and check if it has passed DRC, LVS and antenna check
+
 
 .. code-block:: shell
 
    ./designs/mem_1r1w/runs/run1/results/final/gds/mem_1r1w.gds
 
-- Load the final GDSII using klayout :
+- Load the final GDSII layout using klayout :
 
 .. code-block:: shell
 

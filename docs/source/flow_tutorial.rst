@@ -363,8 +363,6 @@ SignOff
 
    ./designs/mem_1r1w/runs/run1/results/signoff/
 
-final
-------
 - View the final results of ``mem_1r1w``:
 
 .. code-block:: shell

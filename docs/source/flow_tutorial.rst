@@ -6,7 +6,7 @@ Introduction
 ============
 OpenLane is an automated RTL-GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, CVC, Klayout and a number of custom scripts for design exploration and optimization. The flow performs full ASIC implementation steps from RTL all the way down to GDSII.
 
-You will learn how to set up and run the OpenLane flow from RTL to GDSII and generate a DRC, LVS clean layout.
+You will learn how to set up and run the OpenLane flow from RTL-GDSII and generate a DRC, LVS clean layout.
 
 Getting Started
 ----------------
@@ -32,7 +32,7 @@ The default variable for platform configuration of the design:
 
 .. code-block:: shell
 
-   set ::env(PDK) "sky130"
+   set ::env(PDK) "sky130A"
    set ::env(STD_CELL_LIBRARY) <path for sky130_fd_sc_hd> # set by default
 
 
@@ -46,7 +46,7 @@ Set the basic configuration config.tcl file for a design using the `OpenLane Var
 
    set ::env(DESIGN_NAME) mem_1r1w
    set ::env(VERILOG_FILES) [glob $::env(DESIGN_DIR)/src/*.v]
-   set ::env(BASE_SDC_FILE) "./designs/mem_1r1w/constraint.sdc"
+   set ::env(BASE_SDC_FILE) "$::env(DESIGN_DIR)/constraint.sdc"
    set ::env(CLOCK_PORT) "clk"
    set ::env(CLOCK_NET) $::env(CLOCK_PORT)
    
@@ -79,7 +79,7 @@ Design Source File
    ./designs/mem_1r1w/src/mem_1r1w.v
 
 
-Running The Automatic  RTL-GDSII Flow
+Running The Automatic RTL-GDSII Flow
 =======================================
 
 In this section you will learn how to run the complete design flow from RTL-GDSII both in the interactive and automatic flow.
@@ -104,7 +104,7 @@ Make sure you are in the openlane directory:
 
 .. code-block:: shell
 
-   cd Openlane
+   cd OpenLane
 
 Run the complete flow with:
 
@@ -117,13 +117,13 @@ Run the complete flow with:
 Run Directory Structure
 -----------------------
 
-The flow is completed, check the results, reports, and logs files of each stage flow within the run directory:
+If the flow is completed, check the results, reports, and logs files of each stage flow within the `runs` directory:
 
 .. code-block:: shell
    
    ./design/mem_1r1w/runs/run1
 
-View logs OF The Flow
+View Logs Of The Flow
 ----------------------
 
 The example log tree structure below shows the step number for each flow stage, indicating its position in the RTL-GDSII flow. In case of flow failure, you can use these logs to understand each stage and debug.
@@ -174,7 +174,7 @@ View Result Of The Flow:
    ./designs/mem_1r1w/runs/run1/results/
 
    
-Flow stages
+Flow Stages
 ===========
 
 You can view flow results using the command interface from the shell or OpenROAD GUI to visualize the layout and debug it.
@@ -197,8 +197,8 @@ Synthesis Exploration
 
 .. code-block:: shell
 
-  set ::env(SYNTH_STRATEGY) "DELAY 0", 1, 2 # for timing optimization
-  set ::env(SYNTH_STRATEGY) "AREA 1", 1, 2 # for area optimization
+  set ::env(SYNTH_STRATEGY) "DELAY 0", 1, 2, 3 # for timing optimization
+  set ::env(SYNTH_STRATEGY) "AREA 0", 1, 2, 3 # for area optimization
 
 
 set the above variable in the ``config.tcl`` file and re-run the design to see the impact.
@@ -306,10 +306,3 @@ SignOff
    klayout mem_1r1r.gds
 
 .. image:: ../_static/final.png
-
-
-
-
-
-
-

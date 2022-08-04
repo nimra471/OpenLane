@@ -18,7 +18,7 @@ This section describes the environment setup to run a design in both automatic a
 Setting Up Environment
 -----------------------
 
-Install the OpenLane. Refer to the OpenLane Installation.
+Install OpenLane. Refer to `OpenLane Installation <https://armleo-openlane.readthedocs.io/en/merge-window-2/docs/source/installation.html>`_. 
 
 Configuring The Design
 -----------------------
@@ -33,7 +33,7 @@ The default variable for platform configuration of the design:
 .. code-block:: shell
 
    set ::env(PDK) "sky130A"
-   set ::env(STD_CELL_LIBRARY) <path for sky130_fd_sc_hd> # set by default
+   set ::env(STD_CELL_LIBRARY) "sky130_fd_sc_hd" ;# set by default
 
 
 Refer to the library information `here <https://antmicro-skywater-pdk-docs.readthedocs.io/en/test-submodules-in-rtd/contents/libraries.html>`_.
@@ -98,7 +98,7 @@ Use the clock period to meet the timing of the ``mem_1r1w``:
 
 .. code-block:: shell
 
-   CLOCK_PERIOD “10.0” #in ns
+   CLOCK_PERIOD “10.0” ;#in ns
    
 Make sure you are in the openlane directory:
 
@@ -126,16 +126,56 @@ If the flow is completed, check the results, reports, and logs files of each sta
 View Logs Of The Flow
 ----------------------
 
-The example log tree structure below shows the step number for each flow stage, indicating its position in the RTL-GDSII flow. In case of flow failure, you can use these logs to understand each stage and debug.
-
-
-.. image:: ../_static/finaltree2.png
-
-- View the logs files:
+- View the logs files of each flow stage:
 
 .. code-block:: shell
 
    ./designs/mem_1r1r/runs/run1/logs/
+
+The log tree structure below shows the number prefix for each flow stage, indicating its position in the RTL-GDSII flow. In case of flow failure, you can use these logs to understand each flow stage and debug.
+
+.. code-block:: shell
+
+   ├──synthesis
+   │   ├── 1-synthesis.log
+   │   ├── 2-sta.log
+   ├── floorplan
+   │   ├── 3-initial_fp.log
+   │   ├── 4-io.log
+   │   ├── 5-tap.log
+   │   └── 6-pdn.log
+   ├── placement
+   │   ├── 10-detailed.log
+   │   ├── 7-global.log
+   ├── cts
+   |   ├── 11-cts.log
+   |   └── 13-resizer.log
+   ├── routing
+   │   ├── 15-resizer.log
+   │   ├── 18-global.log
+   │   ├── 19-fill.log
+   │   ├── 21-detailed.log
+   ├── signoff
+   │   ├── 23-parasitics_extraction.min.log
+   │   ├── 25-parasitics_extraction.max.log
+   │   ├── 28-parasitics_sta.log
+   │   ├── 29-parasitics_multi_corner_sta.log
+   │   ├── 30-gdsii.log
+   │   ├── 30-lef.log
+   │   ├── 30-maglef.log
+   │   ├── 31-gdsii-klayout.log
+   │   ├── 32-xor.log
+   │   ├── 33-spice.log
+   │   ├── 34-write_powered_def.log
+   │   ├── 36-lef.log
+   │   ├── 36-mem_1r1w.lef.log
+   │   ├── 36-mem_1r1w.lvs.lef.log
+   │   ├── 37-drc.log
+   │   ├── 38-antenna.log
+
+.. note::
+   
+   The log tree structure above contain main logs file of each flow stage. You can see more logs file from the log directory.
 
 
 View Reports OF The Flow:
@@ -148,7 +188,7 @@ View Reports OF The Flow:
    ./designs/mem_1r1w/runs/run1/reports/
 
 
-- The table below shows the generated example reports:
+- The table below shows the generated example reports of each flow stage:
 
 +--------------------------------+-----------------------------+-----------------------+
 |``1-synthesis.AREA_0.chk.rpt``  | ``1-synthesis_dff.stat``    |    ``2-syn_sta.rpt``  |
@@ -167,13 +207,26 @@ View Reports OF The Flow:
 View Result Of The Flow:
 ------------------------
 
-- View the results of the flow which contains ``.def``, ``.v``, ``lef``, ``.sdf``, ``.spef``,  ``.spi``, ``.sdc`` and ``.gds`` files:
+- View the results of the flow which contains ``.def``, ``.v``, ``lef``, ``.sdf``, ``.spef``,  ``.spi``, ``.sdc`` ``.mag`` and ``.gds`` files:
 
 .. code-block:: shell
 
    ./designs/mem_1r1w/runs/run1/results/
 
-   
+
+- The table below shows generated result of each flow stage of ``mem_1r1w``:
+
++---------------------------------+------------------------------+-----------------------+
+|   ``mem_1r1w.def``              |      ``mem_1r1w.lef``        |  ``mem_1r1w.mag``     |
+|                                 |                              |                       |
++---------------------------------+------------------------------+-----------------------+
+|   ``mem_1r1w.sdc``              |      ``mem_1r1w.v``          |  ``mem_1r1w.sdf``     |
+|                                 |                              |                       |
++---------------------------------+------------------------------+-----------------------+
+|   ``mem_1r1w.spice``            |      ``mem_1r1w.spef``       |  ``mem_1r1w.drc.gds`` |
+|                                 |                              |                       |
++---------------------------------+------------------------------+-----------------------+
+
 Flow Stages
 ===========
 
@@ -191,14 +244,17 @@ Synthesis
    ./designs/mem_1r1w/runs/run1/results/synthesis/mem_1r1w.v
 
 Synthesis Exploration
------------------------
+----------------------
 
-- Explore different synthesis strategies for timing and area optimization:
+- Explore different synthesis strategies using ``-synth_explore`` which will try different synthesis strategies against the input design.
 
 .. code-block:: shell
 
-  set ::env(SYNTH_STRATEGY) "DELAY 0", 1, 2, 3 # for timing optimization
-  set ::env(SYNTH_STRATEGY) "AREA 0", 1, 2, 3 # for area optimization
+   [INFO]: Running Synthesis Exploration...
+   [INFO]: This is a Synthesis Exploration and so no need to remove the defparam lines.
+   [INFO]: Generating exploration report...
+   [SUCCESS]: Done with synthesis exploration: See report at 'designs/mem_1r1w/runs/run3/reports/synthesis/0-exploration_analysis.html'.
+
 
 
 set the above variable in the ``config.tcl`` file and re-run the design to see the impact.
@@ -241,6 +297,7 @@ Placement
 .. image:: ../_static/placement_density.png
 
 Change the ``DIE_AREA`` or ``FP_CORE_UTIL`` and ``PL_TARGET_DENSITY`` in the ``config.tcl`` and re-run the design to see the impact on the placement density of standard cells.
+
 
 Clock Tree Synthesis
 --------------------
@@ -292,17 +349,25 @@ View the worst slack, worst negative slack and total negative slack of ``mem_1r1
 
 SignOff
 --------
-- View the final layout GDSII and check if it has passed DRC, LVS and antenna check
+- View the final layout GDSII and check if it has passed DRC, LVS and antenna check:
 
 
 .. code-block:: shell
 
-   ./designs/mem_1r1w/runs/run1/results/final/gds/mem_1r1w.gds
+   ./designs/mem_1r1w/runs/run1/results/signoff/
 
-- Load the final GDSII layout using klayout :
+final
+------
+- View the final results of ``mem_1r1w``:
 
 .. code-block:: shell
 
-   klayout mem_1r1r.gds
+   ./design/mem_1r1w/runs/run1/results/final
+
+- Load the final GDSII layout using klayout:
+
+.. code-block:: shell
+
+   klayout mem_1r1w.gds
 
 .. image:: ../_static/final.png

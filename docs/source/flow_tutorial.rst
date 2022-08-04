@@ -255,10 +255,6 @@ Synthesis Exploration
    [INFO]: Generating exploration report...
    [SUCCESS]: Done with synthesis exploration: See report at 'designs/mem_1r1w/runs/run3/reports/synthesis/0-exploration_analysis.html'.
 
-
-
-set the above variable in the ``config.tcl`` file and re-run the design to see the impact.
-
 FloorPlanning
 --------------
 
@@ -362,7 +358,7 @@ final
 
 .. code-block:: shell
 
-   ./design/mem_1r1w/runs/run1/results/final
+   ./design/mem_1r1w/runs/run1/results/final/
 
 - Load the final GDSII layout using klayout:
 

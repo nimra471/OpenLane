@@ -174,9 +174,8 @@ The log tree structure below shows the number prefix for each flow stage, indica
    │   ├── 38-antenna.log
 
 .. note::
-   
-   The log tree structure above contain main logs file of each flow stage. You can see more logs file from the log directory.
 
+   The log tree structure above contains main logs file of each flow stage. You can see more logs file from the log directory.
 
 View Reports OF The Flow:
 -------------------------
@@ -194,7 +193,7 @@ View Reports OF The Flow:
 |``1-synthesis.AREA_0.chk.rpt``  | ``1-synthesis_dff.stat``    |    ``2-syn_sta.rpt``  |
 |                                |                             |                       |
 +--------------------------------+-----------------------------+-----------------------+
-| ``3-initial_fp_core_area.rpt`` |``3-initial_fp_die_area.rpt``|    11-cts_sta.rpt     |
+| ``3-initial_fp_core_area.rpt`` |``3-initial_fp_die_area.rpt``|   ``11-cts_sta.rpt``  |
 |                                |                             |                       |
 +--------------------------------+-----------------------------+-----------------------+
 | ``11-cts_sta.clock_skew.rpt``  |     ``18-grt_sta.rpt``      |   ``32-xor.rpt``      |
@@ -246,14 +245,26 @@ Synthesis
 Synthesis Exploration
 ----------------------
 
-- Explore different synthesis strategies using ``-synth_explore`` which will try different synthesis strategies against the input design.
+- Explore different synthesis strategies using ``-synth_explore`` which will try different synthesis strategies for area and timing optimization against the input design and generate report of applied each synthesis strategy:
 
 .. code-block:: shell
 
-   [INFO]: Running Synthesis Exploration...
-   [INFO]: This is a Synthesis Exploration and so no need to remove the defparam lines.
-   [INFO]: Generating exploration report...
-   [SUCCESS]: Done with synthesis exploration: See report at 'designs/mem_1r1w/runs/run3/reports/synthesis/0-exploration_analysis.html'.
+   ./designs/mem_1r1w/runs/run1/reports/synthesis/
+
+
+- The table below shows a generated report of synthesis exploration:
+
++---------------------------------+--------------------------------+----------------------------------+
+|``0-synthesis.AREA_0.stat.rpt``  |``0-synthesis.AREA_1.stat.rpt`` |``0-synthesis.AREA_2.stat.rpt``   |
+|                                 |                                |                                  |
++---------------------------------+--------------------------------+----------------------------------+
+| ``0-synthesis.AREA_3.stat.rpt`` |``0-synthesis.DELAY_0.stat.rpt``|  ``0-synthesis.DELAY_1.stat.rpt``|
+|                                 |                                |                                  |
++---------------------------------+--------------------------------+----------------------------------+
+|``0-synthesis.DELAY_2.stat.rpt`` | ``0-synthesis.DELAY_3.chk.rpt``|  ``0-synthesis.DELAY_4.stat.rpt``|
+|                                 |                                |                                  |
++---------------------------------+--------------------------------+----------------------------------+
+
 
 FloorPlanning
 --------------
